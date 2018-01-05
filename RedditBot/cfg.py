@@ -1,0 +1,4 @@
+USER = "itsthenewbot"
+PASSWORD = "test1234"
+CLIENT_ID = "CzXdS0dC4gVHWA"
+CLIENT_SECRET = "Be73WJGK-uAgxuKGoxc0cGR28r0"
