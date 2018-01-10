@@ -1,4 +1,4 @@
-import praw
+
 from praw import *
 from PIL import Image, ImageTk, ImageOps
 from io import BytesIO
@@ -12,7 +12,7 @@ TITLE_LIMIT = 25
 class Redditbot():
     def __init__(self):
         self._reddit = self.login()
-        self.subreddit = self._reddit.subreddit('all')
+        self._subreddit = self._reddit.subreddit('all')
         self._submission = None
         self._comment = None
 
@@ -33,7 +33,7 @@ class Redditbot():
 
     def getSubmissionList(self):
         submissionList = []
-        for submission in self.subreddit.top('all'):
+        for submission in self._subreddit.top('all'):
             submissionList.append(submission)
         return submissionList
 
@@ -43,4 +43,4 @@ class Redditbot():
 
 
     def changeSubreddit(self, newsubreddit):
-        self._subreddit = newsubreddit
+        self._subreddit = self._reddit.subreddit(str(newsubreddit))

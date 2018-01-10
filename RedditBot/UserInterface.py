@@ -27,7 +27,7 @@ class GUI(Frame):
         try:
             self._bot = Redditbot()
             self._submissionlist = []
-            self._subSubDirectory.set(self._bot.subreddit.display_name)
+            self._subSubDirectory.set(self._bot._subreddit.display_name)
             self._statusVar.set("Connection successful! :D")
         except:
             self._statusVar.set("Connection unsuccessful.. :(")
@@ -90,7 +90,7 @@ class GUI(Frame):
         self._downvoteLabel = Label(self._statFrame, text="Downvotes:")
         self._downvoteLabel.grid(row=1, column=0)
         self._downvoteLabelCount = Label(self._statFrame, textvariable=self._downvoteCount)
-        self._downvoteLabelCount.grid(row=1, column = 1)
+        self._downvoteLabelCount.grid(row=1, column=1)
 
         self._numCommentLabel = Label(self._statFrame, text="Comment Count:")
         self._numCommentLabel.grid(row=2, column=0)
@@ -99,7 +99,7 @@ class GUI(Frame):
 
         self._subredditNameLabel = Label(self._statFrame, text="Subreddit:")
         self._subredditNameLabel.grid(row=3, column=0)
-        self._subredditNameLabelName = Label(self._statFrame, textvariable=self._subredditName) # Great naming
+        self._subredditNameLabelName = Label(self._statFrame, textvariable=self._subredditName)  # Great naming
         self._subredditNameLabelName.grid(row=3, column=1)
 
         self._gildLabel = Label(self._statFrame, text="Gilds:")
@@ -107,15 +107,24 @@ class GUI(Frame):
         self._gildLabelCount = Label(self._statFrame, textvariable=self._gildCount)
         self._gildLabelCount.grid(row=4, column=1)
 
+        # Sub Changer
+
+        self._newSub = StringVar()
+        self._subChangeFrame = Frame(self)
+        self._subChangeFrame.grid(row=2, column=0, sticky=STICKY)
+        self._newSubEntry = Entry(self._subChangeFrame, textvariable=self._newSub)
+        self._newSubEntry.grid(row=0, column=0, sticky=STICKY)
+        self._subChangeButton = Button(self._subChangeFrame, command=self.changeSubreddit, text="GO")
+        self._subChangeButton.grid(row=0, column=1, sticky=STICKY)
+
         # Status Bar
         self._statusBar = Entry(self, state='disabled', textvariable=self._statusVar)
-        self._statusBar.grid(row=2, column=0, columnspan=4, sticky=N + E + S + W)
+        self._statusBar.grid(row=3, column=0, columnspan=4, sticky=N + E + S + W)
 
     def updateStatus(self, status):
         self._statusVar.set(status)
 
     def populateListbox(self):
-        self._bot.getSubmissionList()
         self._submissionlist = self._bot.getSubmissionList()
         listoftitles = []
         listStr = ""
@@ -158,3 +167,7 @@ class GUI(Frame):
             self._contentBox.insert("1.0", submission.selftext)
         self.getImage(submission)
         self.setStats(submission)
+
+    def changeSubreddit(self):
+        self._bot.changeSubreddit(self._newSub.get())
+        self.populateListbox()
